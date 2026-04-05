@@ -1,0 +1,12 @@
+node_modules
+dist
+out
+package-lock.json
+.vscode-test
+**/*.map
+.DS_Store
+.env
+.env.local
+.env.production
+.env.example
+*.vsix
