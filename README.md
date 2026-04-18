@@ -1,51 +1,66 @@
-# Krypt Security
+# Krypt Security 🛡️
 
-Krypt is a high-performance VS Code extension designed for developers who prioritize security throughout their local development lifecycle. It performs a **dual-pass scan** across your workspace to identify both exposed secrets and critical source code vulnerabilities using a hybrid of local heuristics and advanced AI analysis.
+Krypt is a professional-grade VS Code security extension designed for developers who demand high-accuracy vulnerability detection. It leverages a sophisticated **Three-Pass AI Verification Architecture** to identify exposed secrets and OWASP vulnerabilities while aggressively minimizing false positives.
 
 ---
 
-## 🚀 Features
+## 🚀 Key Features
 
-- **Secret Detection**: Rapidly identifies API keys, private tokens, high-entropy strings, and common authentication headers (Bearer, JWT, AWS, etc.) using fine-tuned local regex heuristics.
-- **AI-Powered Analysis**: Delivers precise explanations and severity assessments for any detected risk via the **DeepSeek-v3.2** model (via OpenRouter).
-- **OWASP Top 10 Scanning**: Performs a dedicated analysis for critical vulnerabilities:
-    - SQL Injection
+- **Multi-Pass AI Verification**: Unlike single-pass scanners, Krypt uses a cascading verification logic (DeepSeek V3.2 + DeepSeek R1) to ensure every finding is legitimate.
+- **Configurable AI Models**: Support for OpenRouter allows you to swap models (e.g., Claude 3.7, GPT-4o, or DeepSeek) for different phases of the scan.
+- **Advanced Secret Detection**: Identify API keys, private tokens, and high-entropy strings using local heuristics before AI validation.
+- **OWASP Top 10 Surface Analysis**: Deep contextual analysis for:
+    - SQL & Command Injection
     - Cross-Site Scripting (XSS)
-    - Broken Authentication
-    - Sensitive Data Exposure
-    - Missing Access Control
-- **Output-Centric Workflow**: Results are neatly categorized and sorted by severity (CRITICAL, HIGH, MEDIUM, LOW) directly in the "Krypt Security" Output Channel.
-- **Privacy-First**: Selectively ignores build artifacts (`.next`, `dist`, `out`), environment files (`.env*`), and non-source files to optimize scan time and minimize AI token usage.
+    - Broken Authentication & Authorization
+    - Insecure Data Storage
+- **Security Engineer Persona**: Findings include technical reasoning, realistic exploit scenarios, and required conditions—written by an AI persona tuned for precision, not paranoia.
+
+---
+
+## 🔍 The Multi-Pass Architecture
+
+Krypt employs a state-of-the-art verification pipeline to ensure "No Noise" security reporting:
+
+1.  **Pass 1: Initial Scan (Discovery)**
+    *   Uses **DeepSeek V3.2** to sweep the workspace and identify potential risks.
+2.  **Pass 2: Strict Auditor (Verification)**
+    *   Re-evaluates findings with a strict "Security Reviewer" prompt. Items are classified as `CONFIRMED`, `FALSE_POSITIVE`, or `UNCERTAIN`.
+3.  **Pass 3: Final Judge (Escalation)**
+    *   **DeepSeek R1** (High-Reasoning) analyzes any `UNCERTAIN` findings with deep technical logic to provide a final binary verdict.
 
 ---
 
 ## 🛠️ Getting Started
 
 ### 1. Installation
-Currently, Krypt is available for local development and side-loading. To run the extension locally:
 1. Clone the repository: `git clone https://github.com/GarzvR/krypt-extension`
 2. Install dependencies: `npm install`
-3. Press `F5` in VS Code to launch the Extension Development Host.
+3. Press `F5` to launch the extension.
 
 ### 2. Configuration
-Krypt requires an **OpenRouter API Key** to perform AI analysis.
-1. Obtain an API key from [OpenRouter](https://openrouter.ai/).
-2. In VS Code, navigate to **Settings** (`Cmd + ,`).
-3. Search for **Krypt: Open Router Api Key** and paste your key.
+Krypt requires an **OpenRouter API Key**.
+1. Obtain a key from [OpenRouter](https://openrouter.ai/).
+2. In VS Code Settings (`Cmd + ,`), search for **Krypt**.
+3. Configure your API key and preferred models:
+    *   `krypt.scannerModel`: Initial discovery model.
+    *   `krypt.verifierModel`: Second-pass verification model.
+    *   `krypt.escalationModel`: Final escalation model (R1 recommended).
 
 ---
 
-## 🔍 How It Works
+## 🧼 False Positive Control
 
-Krypt utilizes a sophisticated two-step process:
-1. **Pass 1: Secret Identification**: Local Regex patterns sweep the workspace for secrets. It acts as a fast filter, ensuring only potential risks are analyzed further.
-2. **Pass 2: Vulnerability Surface Scan**: Source files are batched and analyzed for OWASP-level security risks. Unlike simple linters, Krypt understands the context of your route handlers and logic using AI.
+Krypt includes built-in logic to handle "noisy" patterns that common scanners miss:
+- **Firebase Intelligence**: Automatically recognizes that Firebase API keys in frontend code are public-by-design and downgrades/skips them accordingly.
+- **Context Awareness**: Analyzes if code is actually reachable or just dead code/configuration.
+- **Hardcoded Allowlist**: Common safe patterns and configuration files are pre-filtered to save tokens and time.
 
 ---
 
 ## 📋 Requirements
 - VS Code version `^1.90.0`
-- An active [OpenRouter](https://openrouter.ai/) account with credits for the `deepseek/deepseek-v3.2` model.
+- An active [OpenRouter](https://openrouter.ai/) account.
 
 ---
 
