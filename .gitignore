@@ -10,3 +10,4 @@ package-lock.json
 .env.production
 .env.example
 *.vsix
+krypt-landing/
