@@ -8,3 +8,9 @@ src/**
 .eslintrc.json
 **/*.map
 **/*.ts
+.env
+.env.local
+benchmark.ts
+benchmark-results.json
+out
+dist/extension.js.map

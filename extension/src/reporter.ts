@@ -8,7 +8,7 @@ export class Reporter {
         this.channel = vscode.window.createOutputChannel('Krypt Security');
     }
 
-    public report(secrets: SecretAnalysisResult[], vulns: VulnAnalysisResult[]) {
+    public report(secrets: SecretAnalysisResult[], vulns: VulnAnalysisResult[], footerMsg?: string) {
         this.channel.clear();
         this.channel.show();
 
@@ -26,6 +26,10 @@ export class Reporter {
 
         this.channel.appendLine(`\n--- VULNERABILITIES FOUND (${vulns.length}) ---`);
         this.printVulns(vulns);
+
+        if (footerMsg) {
+            this.channel.appendLine(`\n${footerMsg}`);
+        }
     }
 
     private printSecrets(items: SecretAnalysisResult[]) {
